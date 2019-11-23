@@ -64,7 +64,5 @@ FORMS += \
     secondui.ui \
     start.ui
 
-unix:!macx: LIBS += -lpackagekit-glib2 -lxapian -lapt-pkg -lKF5ConfigCore -lKF5ConfigGui -lKF5I18n -lKF5ConfigWidgets -lKF5CoreAddons
-
 RESOURCES += \
     main.qrc
