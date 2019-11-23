@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>logo.png</file>
+        <file>banner.png</file>
+        <file>Staatliches-Regular.ttf</file>
+    </qresource>
+</RCC>
