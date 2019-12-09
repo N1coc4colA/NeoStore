@@ -17,11 +17,15 @@ BookPage::BookPage(QWidget *parent) :
     ui->Title->setFont(bold);
     m_component = new Components;
     ui->horizontalLayout->addWidget(m_component);
+    connect(m_component, &Components::sendData, this, &BookPage::handleValue);
+
+    qDebug() << "BookPage component initialization finished, alias viewer.";
 }
 
 BookPage::~BookPage()
 {
     delete ui;
+    m_component->~Components();
 }
 
 void BookPage::init(QString *SECTION)
@@ -43,4 +47,11 @@ void BookPage::init(QString *SECTION)
 
     ui->Title->setStyleSheet("border-image: url(); background-image: url(); background-color: #00000000; color: white; font-size: 70px;");
     m_component->init(SECTION);
+
+    qDebug() << "BookPage component's UI initialization finished, alias viewer.";
+}
+
+void BookPage::handleValue(QString *value)
+{
+    Q_EMIT openView(value);
 }

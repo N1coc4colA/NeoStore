@@ -18,7 +18,8 @@ public:
 
 public Q_SLOTS:
     void sendData();
-    void init(QString *);
+    void init(QString *, QString *);
+    void dark(bool);
 
 Q_SIGNALS:
     void objectClicked(QString *);

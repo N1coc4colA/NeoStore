@@ -3,5 +3,8 @@
         <file>logo.png</file>
         <file>banner.png</file>
         <file>Staatliches-Regular.ttf</file>
+        <file>mybg.png</file>
+        <file>mybg.svg</file>
+        <file>mybg.svgz</file>
     </qresource>
 </RCC>

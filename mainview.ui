@@ -193,7 +193,7 @@
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true"/>
+            <string notr="true">background: #f3f3f3;</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <property name="spacing">

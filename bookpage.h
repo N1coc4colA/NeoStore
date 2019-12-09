@@ -22,8 +22,13 @@ public:
     ~BookPage();
     QString dataURL;
 
+public: Q_SIGNALS:
+    void sendData(QString *);
+    void openView(QString *);
+
 public Q_SLOTS:
     void init(QString *);
+    void handleValue(QString *);
 
 private:
     Ui::BookPage *ui;

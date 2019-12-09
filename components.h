@@ -1,6 +1,7 @@
 #ifndef COMPONENTS_H
 #define COMPONENTS_H
 
+#include "flowlayout.h"
 #include "appcomponent.h"
 
 #include <QWidget>
@@ -19,11 +20,17 @@ public:
     int old_length;
     QString old_sec;
 
+Q_SIGNALS:
+    void startReUp(QString *);
+    void sendData(QString *);
+
 public Q_SLOTS:
     void init(QString*);
+    void reUploadData(QString *);
 
 private:
     Ui::Components *ui;
+    FlowLayout *layering;
     AppComponent *app1;
     AppComponent *app2;
     AppComponent *app3;
@@ -32,7 +39,6 @@ private:
     AppComponent *app6;
     AppComponent *app7;
     AppComponent *app8;
-    QVector <AppComponent *> APP;
 };
 
 #endif // COMPONENTS_H

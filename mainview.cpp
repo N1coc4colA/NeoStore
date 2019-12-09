@@ -1,23 +1,31 @@
 #include "mainview.h"
 #include "ui_mainview.h"
 #include "start.h"
+#include "downloadpage.h"
+#include "ndeclarative.h"
 
+#include <QMainWindow>
+#include <QUuid>
+#include <DebconfKDE/DebconfGui.h>
+#include <KF5/KIOCore/KProtocolManager>
+#include <KF5/KIOCore/kiocore_export.h>
 #include <QProcess>
-#include <QDebug>
 #include <QDir>
 
 DWIDGET_USE_NAMESPACE
+
+class UpdatePage;
 
 MainView::MainView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainView)
 {
     m_backend.init();
+    runtime = new SpecialEdits;
 
-    this->setWindowIcon(QIcon("application-x-deb"));
     ui->setupUi(this);
-    ui->Main->setStyleSheet("background: #fff");
 
+    popuping = new DownloadArea;
     TITLEBAR = new DTitlebar;
     LINER = new DLineEdit;
     scdL = new QVBoxLayout;
@@ -29,8 +37,8 @@ MainView::MainView(QWidget *parent) :
     DBlurEffectWidget *sideBar = new DBlurEffectWidget;
     QWidget *titling = new QWidget;
     const QIcon what = QIcon();
-    QWidget *LOGO = new QWidget;
 
+    popuping->shadowing();
 
     sideBar->setFixedWidth(300);
     sideBar->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
@@ -41,7 +49,7 @@ MainView::MainView(QWidget *parent) :
     LINER->setPlaceholderText("Search");
 
     TITLEBAR->setIcon(what);
-    TITLEBAR->setTitle("                                   ");
+    TITLEBAR->setTitle("");
 
     titling->setFixedHeight(40);
     titling->setStyleSheet("background-color: rgba(255,255,255,0.2);");
@@ -51,11 +59,7 @@ MainView::MainView(QWidget *parent) :
     scdL->setMargin(0);
 
     tL->setContentsMargins(5, 5, 5, 5);
-    tL->addWidget(LOGO);
     tL->addWidget(LINER);
-
-    LOGO->setStyleSheet("border-image: url(:/logo.png) 0 0 0 0 stretch stretch; border-radius: 4px;");
-    LOGO->setFixedWidth(30);
 
     titling->setLayout(tL);
 
@@ -71,11 +75,13 @@ MainView::MainView(QWidget *parent) :
     loadData();
     DThemeManager::instance()->setTheme("dlight");
 
-    APPLYER->setFixedHeight(30);
+    APPLYER->setFixedSize(30, 30);
     APPLYER->move(305, 5);
-    APPLYER->setText("Apply changes");
+    APPLYER->setText("");
+    APPLYER->setIcon(QIcon::fromTheme("checkbox"));
 
     connect(APPLYER, &QPushButton::clicked, this, &MainView::startCommiting);
+    connect(LINER, &DLineEdit::textEdited, this, [=]() { m_listing->checkByChar(new QString(LINER->text())); showListing(); });
 }
 
 MainView::~MainView()
@@ -86,22 +92,38 @@ MainView::~MainView()
 void MainView::packageView()
 {
     QWidget *tmp = new QWidget;
-    tmp->setVisible(false);
-    m_categories = new Categories;
-    scdL->addWidget(m_categories);
+    QSpacerItem *VS = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
+    // Objects construction and/or their initialization.
     viewer = new BookPage;
-    ui->horizontalLayout->addWidget(viewer);
-    viewer->init(new QString("Top"));
     m_listing = new SecondUI(this);
+    m_categories = new Categories;
+    pageUp = new UpdatePage(this);
+
+    //Set up the UI.
+    viewer->init(new QString("Top"));
     m_listing->setVisible(false);
+    pageUp->setVisible(false);
+    ui->horizontalLayout->addWidget(viewer);
     ui->horizontalLayout->addWidget(m_listing);
     ui->horizontalLayout->addWidget(pkgView);
+    ui->horizontalLayout->addWidget(pageUp);
+
+    scdL->addWidget(m_categories);
+    scdL->addItem(VS);
+    scdL->addWidget(popuping);
+
+    tmp->setVisible(false);
 
     connect(m_categories, SIGNAL(showLister()), this, SLOT(showListing()));
     connect(m_categories, &Categories::showCategory, viewer, &BookPage::init);
+    connect(m_categories, &Categories::showCategory, this, &MainView::viewList);
+    connect(viewer, &BookPage::openView, this, &MainView::setPV);
     connect(m_listing, SIGNAL(packageWasSelected(QString*)), this, SLOT(setPV(QString*)));
     connect(pkgView, &PackageData::closing, [=]() { m_listing->setVisible(true); viewer->setVisible(false); });
+    connect(m_categories, &Categories::callUpdatesView, this, [=]() {showListing(); m_listing->setVisible(false); pageUp->setVisible(true);});
+
+    qDebug() << "MainView component initialization finished, alias w, the window.";
 }
 
 void MainView::showListing()
@@ -109,6 +131,7 @@ void MainView::showListing()
     m_listing->setVisible(true);
     viewer->setVisible(false);
     pkgView->setVisible(false);
+    pageUp->setVisible(false);
 }
 
 void MainView::viewList()
@@ -116,6 +139,7 @@ void MainView::viewList()
     m_listing->setVisible(false);
     viewer->setVisible(true);
     pkgView->setVisible(false);
+    pageUp->setVisible(false);
 }
 
 void MainView::loadData()
@@ -151,21 +175,41 @@ void MainView::loadData()
 
 void MainView::startCommiting()
 {
+    if (!m_backend.markedPackages().isEmpty()) {
     m_transaction = m_backend.commitChanges();
-    int i = 0;
 
-    while ( i < m_backend.markedPackages().length()) {
-        qDebug() << m_backend.markedPackages().at(i)->name();
-        i++;
-    }
+    NDeclarative *grant_declaration = new NDeclarative;
+
+    // NDeclarative is used to declare the future changes that will be applyed and get the user grant before setting any changes.
+    // List order to pass (of QApt::Package::State):
+    // ToInstall, ToRemove, ToUpgrade, ToReInstall, ToDowngrade
+    // For the moment it have some errors to show the Qstrings in the list...
+
+    grant_declaration->setPKGList(m_backend);
+    grant_declaration->show();
+
+    connect(grant_declaration, &NDeclarative::sessionAccepted, this, [=] () {
+        // Provide proxy/locale to the transaction
+        qDebug() << "Session have been accepted.";
+        if (KProtocolManager::proxyType() == KProtocolManager::ManualProxy) {
+            m_transaction->setProxy(KProtocolManager::proxyFor("http"));
+        }
+
+        m_transaction->setLocale(QLatin1String(setlocale(LC_MESSAGES, nullptr)));
+        popuping->setUP(m_transaction);
+        m_transaction->run();
+        connect(m_transaction, &QApt::Transaction::finished, &m_backend, &QApt::Backend::reloadCache);
+    }); }
 
     qDebug() << "finished.";
 }
 
 void MainView::setPV(QString *data)
 {
+    qDebug() << data;
     pkgView->init(data);
     viewer->setVisible(false);
     m_listing->setVisible(false);
     pkgView->setVisible(true);
+    pageUp->setVisible(false);
 }

@@ -1,22 +1,61 @@
-#ifndef DOWNLOADPAGE_H
-#define DOWNLOADPAGE_H
+#ifndef UpdatePAGE_H
+#define UpdatePAGE_H
+
+#include "mainview.h"
 
 #include <QWidget>
 
 namespace Ui {
-class DownloadPage;
+class UpdatePage;
 }
 
-class DownloadPage : public QWidget
+class MainView;
+class SpecialEdits;
+
+class UpdatePage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DownloadPage(QWidget *parent = nullptr);
-    ~DownloadPage();
+    explicit UpdatePage(MainView *parent);
+    ~UpdatePage();
+
+    QStringList *getUpdateList(QStringList *list) {
+        QStringList *pkgUpdateList = new QStringList;
+        int i = 0;
+
+        while( i < list->length()) {
+            //have to re-use the backend to find previous package to get a list in alphabetical order.
+
+            if (isUpdateAvailable(PARENT->m_backend.package(list->at(i))) == true){
+                pkgUpdateList->append(list->at(i));
+            }
+            i++;
+        }
+        return  pkgUpdateList;
+    }
+
+    QStringList *getInstalledList() {
+        QStringList *pkgInstalledList = new QStringList;
+        int i = 0;
+        while (i < PARENT->m_listing->listON->length()) {
+
+            //have to re-use the backend to find previous package to get a list in alphabetical order.
+            if (PARENT->m_backend.package(PARENT->m_listing->listON->at(i))->isInstalled() == true) {
+                pkgInstalledList->append(PARENT->m_listing->listON->at(i));
+            }
+            i++;
+        }
+        return pkgInstalledList;
+    }
+
+private Q_SLOTS:
+    void openIPV(QApt::PackageList *);
+    void closeIPV();
 
 private:
-    Ui::DownloadPage *ui;
+    Ui::UpdatePage *ui;
+    MainView *PARENT;
 };
 
-#endif // DOWNLOADPAGE_H
+#endif // UpdatePAGE_H

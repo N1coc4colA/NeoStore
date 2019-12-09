@@ -12,62 +12,103 @@
 #include <QListWidgetItem>
 #include <QFutureWatcher>
 
-bool packageNameLessThan(QString p1, QString p2)
-{
-     return p1 < p2;
-}
-
-QStringList *sortPackages(QStringList *list)
-{
-    std::sort(list->begin(), list->end(), packageNameLessThan);
-    return list;
-}
-
 SecondUI::SecondUI(MainView *parent) :
   QListWidget(nullptr),
   ui(new Ui::SecondUI)
 {
-    PARENT = parent;
     ui->setupUi(this);
-    this->setStyleSheet("background-color: #f0f0f0;");
+    this->setStyleSheet("background-color: #f3f3f3;");
     QStringList *listering = new QStringList;
+    availablePackages = new QApt::PackageList;
     QApt::PackageList pkgList = parent->m_backend.availablePackages();
 
     int i = 0;
     while (i < pkgList.length()) {
         if (pkgList.at(i)->isForeignArch() == true) {
-            listering->append(QString(pkgList.at(i)->name()));
+            listering->append(pkgList.at(i)->name());
+        }
+        if (pkgList.at(i)->isInstalled()) {
+            availablePackages->append(pkgList.at(i));
         }
         i++;
     }
 
-    QFutureWatcher<QStringList *> m_watcher;
-    QFuture<QStringList *> future = QtConcurrent::run(sortPackages, listering);
+    QFuture<QStringList *> future = QtConcurrent::run(SpecialEdits::runtime()->sortPackages, listering);
     m_watcher.setFuture(future);
 
     qDebug() << "1st step right.";
 
-    QStringList *listON = m_watcher.result();
+    listON = m_watcher.result();
 
     i = 0;
-    while (i < listering->length()) {
+    while (i < listON->length()) {
         ui->listWidget->addItem(listON->at(i));
         i++;
     }
 
     CURRENT = new QString;
-    qDebug() << "Total amount of available packages " + QString::number(i) + ".";
+    qDebug() << "Total amount of available packages for the current architecture: " + QString::number(i) + ".";
+    qDebug() << "Total amount of available packages in all APT repositories: " + QString::number(pkgList.length()) + ".";
 
-    connect(ui->listWidget, &QListWidget::currentItemChanged, this, [=]() { Q_EMIT packageWasSelected(new QString(ui->listWidget->currentItem()->text())); });
+    connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=]() { Q_EMIT packageWasSelected(new QString(ui->listWidget->currentItem()->text())); });
+    old_Filter = new QString("All");
+
+    i = 0;
+
+    qDebug() << "SecondUI component initialization finished, alias m_listing.";
 }
 
 SecondUI::~SecondUI()
 {
     delete ui;
     CURRENT->~QString();
+    old_list.~QList();
+    m_watcher.~QFutureWatcher();
 }
 
 void SecondUI::handleValues(QString *ANP)
 {
     ui->listWidget->addItem(*ANP);
+}
+
+void SecondUI::runFilter(QString *filter)
+{
+    int i = 0;
+    if (filter != old_Filter) {
+
+        ui->listWidget->clear();
+        i = 0;
+
+        if (filter == new QString("All")) {
+            while (i < listON->length()) {
+                ui->listWidget->addItem(listON->at(i));
+                i++;
+            }
+
+        }
+    }
+}
+
+void SecondUI::checkByChar(QString *value)
+{
+    int i = 0;
+
+    if (value == QString("")) {
+        ui->listWidget->clear();
+
+        while (i < listON->length()) {
+            ui->listWidget->addItem(listON->at(i));
+            i++;
+        }
+
+    } else {
+        ui->listWidget->clear();
+        while (i < listON->length()) {
+
+            if (QString(listON->at(i)).contains(value) == true) {
+                ui->listWidget->addItem(listON->at(i));
+            }
+            i++;
+        }
+    }
 }

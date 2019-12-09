@@ -18,7 +18,11 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QGridLayout" name="gridLayout"/>
+    <layout class="QHBoxLayout" name="MLL">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+    </layout>
    </item>
    <item>
     <spacer name="verticalSpacer">
@@ -40,6 +44,11 @@
        <width>16777215</width>
        <height>60</height>
       </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+      </font>
      </property>
      <property name="text">
       <string>This Application is the property of n1coc4cola and its content can be under copyright. 

@@ -27,12 +27,16 @@ SOURCES += \
     categories.cpp \
     components.cpp \
     downloadarea.cpp \
-    downloadmanager.cpp \
     downloadpage.cpp \
+    flowlayout.cpp \
+    installedpackagesview.cpp \
     localfilter.cpp \
+    lookupobj.cpp \
     main.cpp \
     mainview.cpp \
+    ndeclarative.cpp \
     packageview.cpp \
+    replyerfixer.cpp \
     secondui.cpp \
     servicemanager.cpp \
     start.cpp
@@ -43,11 +47,15 @@ HEADERS += \
     categories.h \
     components.h \
     downloadarea.h \
-    downloadmanager.h \
     downloadpage.h \
+    flowlayout.h \
+    installedpackagesview.h \
     localfilter.h \
+    lookupobj.h \
     mainview.h \
+    ndeclarative.h \
     packageview.h \
+    replyerfixer.h \
     secondui.h \
     servicemanager.h \
     start.h
@@ -59,10 +67,14 @@ FORMS += \
     components.ui \
     downloadarea.ui \
     downloadpage.ui \
+    lookupobj.ui \
     mainview.ui \
     packageview.ui \
     secondui.ui \
-    start.ui
+    start.ui \
+    installedpackagesview.ui
+
+unix:!macx: LIBS += -lKF5KIOCore -ldebconf-kde
 
 RESOURCES += \
     main.qrc

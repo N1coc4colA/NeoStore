@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="250px" height="250px" viewBox="0 0 250 250" enable-background="new 0 0 250 250" xml:space="preserve">
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-3.1499" y1="100.7598" x2="236.8496" y2="100.7598" gradientTransform="matrix(1 0 0 -1 8.3999 226.0098)">
+	<stop  offset="0" style="stop-color:#00C07E"/>
+	<stop  offset="0.1773" style="stop-color:#00B88F"/>
+	<stop  offset="0.6158" style="stop-color:#2F849A"/>
+	<stop  offset="1" style="stop-color:#734092"/>
+</linearGradient>
+<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="116.8501" y1="225.2598" x2="116.8501" y2="-23.7402" gradientTransform="matrix(1 0 0 -1 8.3999 226.0098)">
+	<stop  offset="0" style="stop-color:#DBDBDB"/>
+	<stop  offset="1" style="stop-color:#262626"/>
+</linearGradient>
+<circle fill="url(#SVGID_1_)" stroke="url(#SVGID_2_)" stroke-width="9" stroke-miterlimit="10" cx="125.25" cy="125.25" r="120"/>
+<g>
+	<g id="stadia-logo-mark">
+		
+			<linearGradient id="Fill-1_1_" gradientUnits="userSpaceOnUse" x1="-181.5029" y1="275.4414" x2="-179.8661" y2="276.1688" gradientTransform="matrix(-103.9231 -60 -40 69.2821 -7623.2461 -29814.4805)">
+			<stop  offset="0.0049" style="stop-color:#FFFFFF"/>
+			<stop  offset="1" style="stop-color:#FFFFFF"/>
+		</linearGradient>
+		<path id="Fill-1" fill="url(#Fill-1_1_)" d="M218.893,156.646c-18.508-46.687-46.27-73.436-73.275-88.707l0,0
+			C110.401,48.023,76.46,47.657,66.125,48.088l0,0c-1.425,0.064-2.746,0.916-3.506,2.17l-0.073,0.105l0,0
+			c-0.198,0.348-0.351,0.725-0.454,1.124l-6.79,25.781l0,0c-0.644,2.479,0.938,4.777,3.36,4.809l0,0
+			c79.7,1.114,109.481,57.96,109.481,57.96l0,0c-50.562-40.044-94.815-36.548-106.551-34.696l0,0
+			c-1.688,0.265-3.126,1.621-3.59,3.347l-7.686,29.229l0,0c-0.507,1.915,0.324,3.781,1.973,4.515l0,0
+			c9.904,4.389,19.087,10.2,27.339,17.159l0,0c7.75,6.539,14.668,14.068,20.691,22.328l0,0c5.878,8.067,11.771,16.837,11.883,27.78
+			l0,0c0.026,2.037,2.23,3.015,3.862,1.706l6.891-5.507l0,0c4.799-3.746,13.288-10.361,17.514-13.647l0,0
+			c1.498-1.178,2.158-3.185,1.578-4.894l0,0c-10.365-30.138-32.821-44.825-32.821-44.825l0,0
+			c27.353,6.213,55.7,39.413,63.679,49.356l0,0c1.27,1.571,3.588,1.736,5.322,0.383l39.156-30.564l0,0
+			c0.461-0.35,0.838-0.788,1.129-1.268l0.025-0.055l0,0C219.205,159.241,219.367,157.848,218.893,156.646"/>
+	</g>
+</g>
+</svg>

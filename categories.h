@@ -18,12 +18,10 @@ public:
 Q_SIGNALS:
     void showCategory(QString *);
     void showLister();
+    void callUpdatesView();
 
 private:
     Ui::Categories *ui;
-
-private Q_SLOTS:
-    void sendData(QString *);
 };
 
 #endif // CATEGORIES_H

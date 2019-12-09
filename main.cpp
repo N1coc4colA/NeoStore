@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
       a.setApplicationVersion("1.β");
       a.setAttribute(Qt::AA_UseHighDpiPixmaps);
       a.setApplicationDisplayName(QObject::tr("NeoStore"));
-      a.setWindowIcon(QIcon::fromTheme("ao-app"));
+      a.setWindowIcon(QIcon(":/mybg.svg"));
 
     MainView w;
     w.setMinimumSize(800, 600);
