@@ -1,0 +1,12 @@
+Package: neostore
+Version: 0.5.4
+Section: System; Utility;
+Priority: optional
+Architecture: amd64
+Essential: no
+Depends: libdtkwidget2 (>=2.0.16.1-1), libdtkcore2 (>=2.0.16.1-1), libqapt3 (>=3.0.4-2), libdebconf-kde1 (>=1.0.2-1+b1), libkf5kiocore5 (>=5.28.0-2), libkf5coreaddons5 (>=5.28.0-2), libqt5widgets5 (>=5.7.1), libqt5gui5 (>=5.7.1), libqt5dbus5 (>=5.7.1), libqt5network5 (>=5.7.1), libqt5core5a (>=5.7.1), libc6 (>=2.14)
+Installed-Size: 756
+Homepage: https://github.com/N1coc4colA/NeoStore
+Maintainer: Nicolas B., @n1coc4cola <n1coc4cola@gmail.com>
+Description: A simple application sore for APT.
+ You can manage your APT packages with a modern interface that allows you to see some top apps, explore your packages categories, and install a package from a file. This app is designed for the xcb platforms, and more for DDE but it can be ran on non-xcb ones too, just some UI features will be miss.
