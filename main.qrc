@@ -6,5 +6,31 @@
         <file>mybg.png</file>
         <file>mybg.svg</file>
         <file>mybg.svgz</file>
+        <file>contrib/deepin.svg</file>
+        <file>contrib/qt.png</file>
+        <file>contrib/kde.svg</file>
+        <file>icons/address-card-solid.svg</file>
+        <file>icons/archive-solid.svg</file>
+        <file>icons/arrow-alt-circle-down-solid.svg</file>
+        <file>icons/arrow-alt-circle-up-solid.svg</file>
+        <file>icons/box-open-solid.svg</file>
+        <file>icons/broom-solid.svg</file>
+        <file>icons/hat-cowboy-side-solid.svg</file>
+        <file>icons/heart-broken-solid.svg</file>
+        <file>icons/star-solid.svg</file>
+        <file>icons/tools-solid.svg</file>
+        <file>icons/trash-restore-solid.svg</file>
+        <file>styles/ndeclarative.qtreeview.css</file>
+        <file>icons/qtreeview/branch-closed.png</file>
+        <file>icons/qtreeview/branch-end.png</file>
+        <file>icons/qtreeview/branch-more.png</file>
+        <file>icons/qtreeview/branch-open.png</file>
+        <file>icons/qtreeview/vline.png</file>
+        <file>icons/check-solid.svg</file>
+        <file>icons/undo-alt-solid.svg</file>
+        <file>icons/redo-alt-solid.svg</file>
+        <file>icons/sync-alt-solid.svg</file>
+        <file>icons/save-solid.svg</file>
+        <file>contrib/fontawesome.svg</file>
     </qresource>
 </RCC>

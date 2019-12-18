@@ -6,6 +6,7 @@
 #include "categories.h"
 #include "secondui.h"
 #include "downloadarea.h"
+#include "dtitlebar.h"
 
 #include <QApt/Transaction>
 
@@ -20,7 +21,6 @@
 #include <QPushButton>
 #include <DLineEdit>
 #include <QWidget>
-#include <DTitlebar>
 #include <DBlurEffectWidget>
 
 DWIDGET_USE_NAMESPACE
@@ -47,6 +47,7 @@ public:
     SecondUI *m_listing;
     SpecialEdits *runtimeInfos;
     SpecialEdits *runtime;
+    QMenu *initMenu();
 
 private:
     Ui::MainView *ui;
@@ -57,7 +58,7 @@ private:
     PackageData *pkgView;
     BookPage *viewer;
     Categories *m_categories;
-    DLineEdit *LINER;
+    QLineEdit *LINER;
     QPushButton *APPLYER;
     DownloadArea *popuping;
     UpdatePage *pageUp;
@@ -66,9 +67,13 @@ public Q_SLOTS:
     void packageView();
     void viewList();
     void loadData();
+    void openAbout();
     void showListing();
+    void openFX();
     void setPV(QString *);
     void startCommiting();
+    void openWithFilePath(QString*);
+    void openWithFilePathOnRuntime(QString);
 };
 
 class SpecialEdits : QObject
@@ -81,22 +86,9 @@ public:
         return new SpecialEdits;
     }
 
-    //Pkg Updates components.
-
-    QStringList PkgUpdates;
-
-    QStringList *getUpdateList() {
-        return &PkgUpdates;
-    }
-
     static bool packageNameLessThan(QString p1, QString p2)
     {
          return p1 < p2;
-    }
-
-    void UpdateChecking(QStringList *list)
-    {
-        PkgUpdates = *list;
     }
 
     static QStringList *sortPackages(QStringList *list)
@@ -105,17 +97,65 @@ public:
         return list;
     }
 
-    //Use some schemes previously used for updates but for Pkg Installed.
+    QStringList pkgToUpdate;
+    QStringList pkgToInstall;
+    QStringList pkgToRemove;
+    QStringList pkgToReInstall;
+    QStringList pkgToDowngrade;
 
-    void InstalledChecking(QStringList *list)
+    bool checkIfToInstall(QString *value)
     {
-        PkgInstalled = *list;
+        int i = 0;
+        while (i<pkgToInstall.length()) {
+            if (pkgToInstall.at(i) == value) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    QStringList PkgInstalled;
+    bool checkIfToReInstall(QString *value)
+    {
+        int i = 0;
+        while (i<pkgToReInstall.length()) {
+            if (pkgToReInstall.at(i) == value) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    QStringList *getInstalledList() {
-        return &PkgInstalled;
+    bool checkIfToRemove(QString *value)
+    {
+        int i = 0;
+        while (i<pkgToRemove.length()) {
+            if (pkgToRemove.at(i) == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool checkIfToUpdate(QString *value)
+    {
+        int i = 0;
+        while (i<pkgToUpdate.length()) {
+            if (pkgToUpdate.at(i) == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool checkIfToDowngrade(QString *value)
+    {
+        int i = 0;
+        while (i<pkgToDowngrade.length()) {
+            if (pkgToDowngrade.at(i) == value) {
+                return true;
+            }
+        }
+        return false;
     }
 };
 

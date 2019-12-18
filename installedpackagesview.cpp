@@ -39,4 +39,5 @@ InstalledPackagesView::InstalledPackagesView(QApt::PackageList *list, QWidget *p
 
     connect(ui->listWidget, &QListWidget::doubleClicked, this, [=]() { Q_EMIT clicker(new QString(ui->listWidget->currentItem()->text())); });
     connect(ui->pushButton, &QPushButton::clicked, this, [=]() { Q_EMIT closing(); this->close(); });
+    connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=]() { Q_EMIT itemWasClicked(new QString(ui->listWidget->currentItem()->text())); });
 }

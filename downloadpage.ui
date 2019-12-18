@@ -66,7 +66,7 @@
       <item>
        <widget class="QWidget" name="widget" native="true">
         <property name="styleSheet">
-         <string notr="true">background: #f3f3f3;</string>
+         <string notr="true">background:#fafafa;</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="leftMargin">
@@ -83,6 +83,18 @@
          </property>
          <item>
           <widget class="QWidget" name="TITLE" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>45</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>45</height>
+            </size>
+           </property>
            <property name="styleSheet">
             <string notr="true">background: #fff;</string>
            </property>

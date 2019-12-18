@@ -14,6 +14,13 @@ class Categories : public QWidget
 public:
     explicit Categories(QWidget *parent = nullptr);
     ~Categories();
+    Ui::Categories *ui;
+    int Updates = 0;
+    int AllApps = 0;
+    int Tools = 0;
+
+public Q_SLOTS:
+    void selectItem(int);
 
 Q_SIGNALS:
     void showCategory(QString *);
@@ -21,7 +28,6 @@ Q_SIGNALS:
     void callUpdatesView();
 
 private:
-    Ui::Categories *ui;
 };
 
 #endif // CATEGORIES_H

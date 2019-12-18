@@ -21,6 +21,7 @@ public:
     explicit PackageData(MainView *parent);
     ~PackageData();
     QApt::Package *m_package;
+    QString old_pkg;
 
 Q_SIGNALS:
     void closing();
@@ -28,6 +29,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void init(QString *);
     void closingOn();
+    void fileOpenedWithPath(QString *);
 
 private:
     Ui::PackageData *ui;

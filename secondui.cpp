@@ -17,26 +17,30 @@ SecondUI::SecondUI(MainView *parent) :
   ui(new Ui::SecondUI)
 {
     ui->setupUi(this);
-    this->setStyleSheet("background-color: #f3f3f3;");
+    this->setStyleSheet("background-color: #fafafa;");
     QStringList *listering = new QStringList;
     availablePackages = new QApt::PackageList;
     QApt::PackageList pkgList = parent->m_backend.availablePackages();
 
+    ui->listWidget->setAlternatingRowColors(true);
+
     int i = 0;
     while (i < pkgList.length()) {
-        if (pkgList.at(i)->isForeignArch() == true) {
-            listering->append(pkgList.at(i)->name());
-        }
-        if (pkgList.at(i)->isInstalled()) {
-            availablePackages->append(pkgList.at(i));
+
+        QApt::Package *pkg = pkgList.at(i);
+
+        if (pkg->isInstalled() != true) {
+            if (pkgList.at(i)->isForeignArch() == true) {
+                listering->append(pkg->name());
+            }
+        } else {
+            availablePackages->append(pkg);
         }
         i++;
     }
 
     QFuture<QStringList *> future = QtConcurrent::run(SpecialEdits::runtime()->sortPackages, listering);
     m_watcher.setFuture(future);
-
-    qDebug() << "1st step right.";
 
     listON = m_watcher.result();
 
@@ -54,8 +58,6 @@ SecondUI::SecondUI(MainView *parent) :
     old_Filter = new QString("All");
 
     i = 0;
-
-    qDebug() << "SecondUI component initialization finished, alias m_listing.";
 }
 
 SecondUI::~SecondUI()

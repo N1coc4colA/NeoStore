@@ -25,11 +25,7 @@ LocalFilter::LocalFilter(QObject *parent) : QObject(parent)
      QFuture<QList<QApt::Package*> > future = QtConcurrent::run(sortPackages, packageList);
      m_watcher->setFuture(future);
 
-     qDebug() << "1st step right.";
-
      listing = m_watcher->result();
-
-     qDebug() << "2nd too";
 
      replyEdits();
 }
@@ -53,6 +49,5 @@ void LocalFilter::replyEdits()
         }
         i++;
     }
-    qDebug() << "finished.";
     this->~LocalFilter();
 }

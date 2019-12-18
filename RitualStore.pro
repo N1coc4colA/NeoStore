@@ -1,4 +1,4 @@
-QT       += core gui network dbus widgets-private
+QT       += core gui network dbus widgets-private KIOCore KCoreAddons
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,12 +22,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    NextUIInterface.cpp \
+    about.cpp \
     appcomponent.cpp \
     bookpage.cpp \
     categories.cpp \
     components.cpp \
+    contentdownloader.cpp \
     downloadarea.cpp \
+    downloadhandler.cpp \
     downloadpage.cpp \
+    dtitlebar.cpp \
     flowlayout.cpp \
     installedpackagesview.cpp \
     localfilter.cpp \
@@ -39,15 +44,23 @@ SOURCES += \
     replyerfixer.cpp \
     secondui.cpp \
     servicemanager.cpp \
-    start.cpp
+    start.cpp \
+    textprogressbar.cpp \
+    tools.cpp
 
 HEADERS += \
+    NextUIInterface.h \
+    about.h \
     appcomponent.h \
     bookpage.h \
     categories.h \
     components.h \
+    contentdownloader.h \
+    dapplication_p.h \
     downloadarea.h \
+    downloadhandler.h \
     downloadpage.h \
+    dtitlebar.h \
     flowlayout.h \
     installedpackagesview.h \
     localfilter.h \
@@ -58,9 +71,12 @@ HEADERS += \
     replyerfixer.h \
     secondui.h \
     servicemanager.h \
-    start.h
+    start.h \
+    textprogressbar.h \
+    tools.h
 
 FORMS += \
+    about.ui \
     appcomponent.ui \
     bookpage.ui \
     categories.ui \
@@ -72,9 +88,10 @@ FORMS += \
     packageview.ui \
     secondui.ui \
     start.ui \
-    installedpackagesview.ui
+    installedpackagesview.ui \
+    tools.ui
 
-unix:!macx: LIBS += -lKF5KIOCore -ldebconf-kde
+unix:!macx: LIBS += -ldebconf-kde
 
 RESOURCES += \
     main.qrc

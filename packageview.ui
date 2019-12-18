@@ -370,12 +370,18 @@
             <property name="text">
              <string>Empty</string>
             </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="4" column="1">
            <widget class="QLabel" name="AppDesc">
             <property name="text">
              <string>Empty</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -394,19 +400,6 @@
            </widget>
           </item>
          </layout>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_5">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -486,9 +479,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QWidget" name="widget_8" native="true"/>
-          </item>
-          <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -500,6 +490,23 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="isize">
+            <property name="text">
+             <string>Installed Size:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_8" native="true"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="dsize">
+            <property name="text">
+             <string>Download Size: </string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>

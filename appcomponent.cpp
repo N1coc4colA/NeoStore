@@ -31,8 +31,8 @@ void AppComponent::init(QString *NAME, QString *RN)
     ui->AppName->setText(*NAME);
     AppName = RN;
     dark(false);
-    Dtk::Widget::DThemeManager::instance()->setTheme("dlight");
-    Dtk::Widget::DThemeManager::instance()->setTheme(ui->pushButton, "dlight");
+    Dtk::Widget::DThemeManager::instance()->setTheme("light");
+    Dtk::Widget::DThemeManager::instance()->setTheme(ui->pushButton, "light");
 }
 
 void AppComponent::dark(bool value)
@@ -40,7 +40,7 @@ void AppComponent::dark(bool value)
     if (value == false) {
         this->setStyleSheet("#AppComponent{color: #000; background:#fff;}");
     } else {
-        this->setStyleSheet("#QWidget{color: #fff; background:#e4e4e4;}");
+        this->setStyleSheet("#AppComponent{color: #fff; background:#e4e4e4;}");
     }
     this->setStyleSheet("border-radius: 5px;");
 }

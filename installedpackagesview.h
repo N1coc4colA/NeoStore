@@ -18,6 +18,7 @@ public:
 Q_SIGNALS:
     void closing();
     void clicker(QString *);
+    void itemWasClicked(QString *);
 
 public Q_SLOTS:
 };
