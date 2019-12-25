@@ -14,6 +14,7 @@ class NDeclarative : public DDialog
     Q_OBJECT
 public:
     explicit NDeclarative(QWidget *parent = nullptr);
+    int markedPackages;
 
 Q_SIGNALS:
     void sessionAccepted();

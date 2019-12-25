@@ -3,8 +3,10 @@
 #include <QDebug>
 #include <dimagebutton.h>
 #include <QPushButton>
-#include <QListWidget>
-#include <QLabel>
+#include <QTreeWidget>
+#include <QHeaderView>
+#include <QFile>
+#include <QTreeWidgetItem>
 #include <QVBoxLayout>
 
 DWIDGET_USE_NAMESPACE
@@ -23,47 +25,46 @@ void NDeclarative::setPKGList(QApt::Backend &m_backend)
     QList<QString*> *ToDowngrade = new QList<QString*>;
     QList<QString*> *ToReinstall = new QList<QString*>;
 
-    while ( i < m_backend.markedPackages().length()) {
-        qDebug() << m_backend.markedPackages().at(i)->name();
-        qDebug() << m_backend.markedPackages().at(i)->state();
+    QApt::CacheState states;
+
+    QApt::PackageList tmp;
+    QApt::PackageList lives;
+
+
+    lives = m_backend.availablePackages();
+
+    while ( i < lives.length()) {
 
         // see enum to see which refers to which.
 
-        if (m_backend.markedPackages().at(i)->state() == QApt::Package::State::ToInstall) {
-            const QString vala = m_backend.markedPackages().at(i)->name();
-            qDebug() << vala;
-            ToInstall->append(new QString(m_backend.markedPackages().at(i)->name()));
-            qDebug() << m_backend.markedPackages().at(i)->name();
-        } if (m_backend.markedPackages().at(i)->state() == QApt::Package::State::ToRemove) {
-            const QString vala = m_backend.markedPackages().at(i)->name();
-            qDebug() << vala;
-            ToRemove->append(new QString(m_backend.markedPackages().at(i)->name()));
-            qDebug() << m_backend.markedPackages().at(i)->name();
-        } if (m_backend.markedPackages().at(i)->state() == QApt::Package::State::ToDowngrade) {
-            const QString vala = m_backend.markedPackages().at(i)->name();
-            qDebug() << vala;
-            ToDowngrade->append(new QString(m_backend.markedPackages().at(i)->name()));
-            qDebug() << m_backend.markedPackages().at(i)->name();
-        } if (m_backend.markedPackages().at(i)->state() == QApt::Package::State::ToReInstall) {
-            const QString vala = m_backend.markedPackages().at(i)->name();
-            qDebug() << vala;
-            ToReinstall->append(new QString(m_backend.markedPackages().at(i)->name()));
-            qDebug() << m_backend.markedPackages().at(i)->name();
-        } if (m_backend.markedPackages().at(i)->state() == QApt::Package::State::ToUpgrade) {
-            qDebug() << "hohohoho!";
-            const QString vala = m_backend.markedPackages().at(i)->name();
-            qDebug() << vala;
-            ToUpdate->append(new QString(m_backend.markedPackages().at(i)->name()));
-            qDebug() << m_backend.markedPackages().at(i)->name();
+        if (lives.at(i)->state() & QApt::Package::State::ToInstall) {
+            ToInstall->append(new QString(lives.at(i)->name()));
+            qDebug() << "Package to install: " + lives.at(i)->name();
+
+        } if (lives.at(i)->state() & QApt::Package::State::ToReInstall) {
+            qDebug() << "Package to reinstall: " + lives.at(i)->name();
+            ToReinstall->append(new QString(lives.at(i)->name()));
+
+        } if (lives.at(i)->state() & QApt::Package::State::ToRemove) {
+            ToRemove->append(new QString(lives.at(i)->name()));
+            qDebug() << "Package to uninstall: " + lives.at(i)->name();
+
+        } if (lives.at(i)->state() & QApt::Package::State::ToDowngrade) {
+            ToDowngrade->append(new QString(lives.at(i)->name()));
+
+        } if (lives.at(i)->state() & QApt::Package::State::ToUpgrade) {
+            ToUpdate->append(new QString(lives.at(i)->name()));
         }
         i++;
     }
 
-    qDebug() << "Session demand sent.";
+    markedPackages = ToUpdate->length() + ToRemove->length() + ToReinstall->length() + ToDowngrade->length() + ToInstall->length();
+
     QPushButton *grant = new QPushButton;
     QPushButton *decline = new QPushButton;
     QVBoxLayout *mainL = new QVBoxLayout;
     QHBoxLayout *fL = new QHBoxLayout;
+    QTreeWidget *widget = new QTreeWidget;
 
     decline->setText("Cancel");
     grant->setText("Apply");
@@ -72,72 +73,83 @@ void NDeclarative::setPKGList(QApt::Backend &m_backend)
 
     i = 0;
     if (!ToInstall->isEmpty()) {
-        QLabel *TTI = new QLabel;
-        QListWidget *LTI = new QListWidget;
+        QTreeWidgetItem *TTI = new QTreeWidgetItem;
+        TTI->setText(0, "To install:");
+        widget->addTopLevelItem(TTI);
         while ( i < ToInstall->length() ) {
-            LTI->addItem(*ToInstall->at(i));
+            QTreeWidgetItem *item = new QTreeWidgetItem;
+            item->setText(0, *ToInstall->at(i));
+            TTI->addChild(item);
+            i++;
         }
-        LTI->setFixedHeight(100);
-        mainL->addWidget(TTI);
-        mainL->addWidget(LTI);
         i = 0;
     }
 
     if (!ToRemove->isEmpty()) {
-        QLabel *TTR = new QLabel;
-        QListWidget *LTR = new QListWidget;
-        while ( i < ToInstall->length() ) {
-            LTR->addItem(*ToInstall->at(i));
+        QTreeWidgetItem *TTR = new QTreeWidgetItem;
+        TTR->setText(0, "To remove:");
+        widget->addTopLevelItem(TTR);
+        while ( i < ToRemove->length() ) {
+            QTreeWidgetItem *item = new QTreeWidgetItem;
+            item->setText(0, *ToRemove->at(i));
+            TTR->addChild(item);
+            i++;
         }
-        LTR->setFixedHeight(100);
-        mainL->addWidget(TTR);
-        mainL->addWidget(LTR);
         i = 0;
     }
 
     if (!ToUpdate->isEmpty()) {
-        QLabel *TTU = new QLabel;
-        QListWidget *LTU = new QListWidget;
-        while ( i < ToInstall->length() ) {
-            LTU->addItem(*ToInstall->at(i));
+        QTreeWidgetItem *TTU = new QTreeWidgetItem;
+        TTU->setText(0, "To Update:");
+        widget->addTopLevelItem(TTU);
+        while ( i < ToUpdate->length() ) {
+            QTreeWidgetItem *item = new QTreeWidgetItem;
+            item->setText(0, *ToUpdate->at(i));
+            TTU->addChild(item);
+            i++;
         }
-        LTU->setFixedHeight(100);
-        mainL->addWidget(TTU);
-        mainL->addWidget(LTU);
         i = 0;
     }
 
     if (!ToReinstall->isEmpty()) {
-        QLabel *TTRI = new QLabel;
-        QListWidget *LTRI = new QListWidget;
-        while ( i < ToInstall->length() ) {
-            LTRI->addItem(*ToInstall->at(i));
+        QTreeWidgetItem *TTRI = new QTreeWidgetItem;
+        TTRI->setText(0, "To reinstall:");
+        widget->addTopLevelItem(TTRI);
+        qDebug() << ToReinstall->at(i);
+        while ( i < ToReinstall->length() ) {
+            QTreeWidgetItem *item = new QTreeWidgetItem;
+            item->setText(0, *ToReinstall->at(i));
+            TTRI->addChild(item);
+            i++;
         }
-        LTRI->setFixedHeight(100);
-        mainL->addWidget(TTRI);
-        mainL->addWidget(LTRI);
         i = 0;
     }
 
     if (!ToDowngrade->isEmpty()) {
-        QLabel *TTD = new QLabel;
-        QListWidget *LTD = new QListWidget;
-        while ( i < ToInstall->length() ) {
-            LTD->addItem(*ToInstall->at(i));
+        QTreeWidgetItem *TTD = new QTreeWidgetItem;
+        TTD->setText(0, "To downgrade:");
+        widget->addTopLevelItem(TTD);
+        while ( i < ToDowngrade->length() ) {
+            QTreeWidgetItem *item = new QTreeWidgetItem;
+            item->setText(0, *ToDowngrade->at(i));
+            TTD->addChild(item);
+            i++;
         }
-        mainL->addWidget(TTD);
-        mainL->addWidget(LTD);
         i = 0;
     }
 
+    mainL->addWidget(widget);
     mainL->addLayout(fL);
     QWidget *mainW = new QWidget;
     mainW->setLayout(mainL);
     this->addContent(mainW);
-    mainW->setStyleSheet("background-color: #000;");
+    mainW->setStyleSheet("background-color: #fff; color: #000;");
 
-    connect(grant, &QPushButton::clicked, this, [=] () {Q_EMIT sessionAccepted(); qDebug() << "Sending demand for root access..."; close();});
+    connect(grant, &QPushButton::clicked, this, [=] () {Q_EMIT sessionAccepted(); close();});
     connect(decline, &QPushButton::clicked, this, [=] () {Q_EMIT sessionDown(); close();});
 
-    qDebug() << "NDeclarative component initialization finished, alias viewer.";
+    QFile file(":/styles/ndeclarative.qtreeview.css");
+    file.open(QFile::ReadOnly);
+    widget->setStyleSheet(file.readAll());
+    widget->header()->setVisible(false);
 }

@@ -49,9 +49,15 @@ public:
         return pkgInstalledList;
     }
 
+public Q_SLOTS:
+
+Q_SIGNALS:
+    void itemWasClicked(QString *);
+
 private Q_SLOTS:
     void openIPV(QApt::PackageList *);
     void closeIPV();
+    void reSendClicked(QString *);
 
 private:
     Ui::UpdatePage *ui;

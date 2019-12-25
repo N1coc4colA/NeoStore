@@ -17,34 +17,56 @@ SecondUI::SecondUI(MainView *parent) :
   ui(new Ui::SecondUI)
 {
     ui->setupUi(this);
-    this->setStyleSheet("background-color: #f3f3f3;");
+    this->setStyleSheet("background-color: #fafafa;");
     QStringList *listering = new QStringList;
     availablePackages = new QApt::PackageList;
     QApt::PackageList pkgList = parent->m_backend.availablePackages();
 
+    ui->listWidget->setAlternatingRowColors(true);
+
     int i = 0;
     while (i < pkgList.length()) {
-        if (pkgList.at(i)->isForeignArch() == true) {
-            listering->append(pkgList.at(i)->name());
-        }
-        if (pkgList.at(i)->isInstalled()) {
-            availablePackages->append(pkgList.at(i));
-        }
+
+        QApt::Package *pkg = pkgList.at(i);
+
+        //If the package is installed, we can access it, it's downloaded, but else, the app crashes, so the check is only for the uninstalled packages.
+
+        if (pkg->IsGarbage != true) {
+            if (pkg->isInstalled() != true) {
+                if (pkg->state() & QApt::Package::State::NotDownloadable) {} else {
+                    if (pkg->isForeignArch() == true) {
+                        listering->append(pkg->name());
+                    }
+                }
+            } else {
+                availablePackages->append(pkg);
+            }
+
+            if (pkg->state() & QApt::Package::State::InstallBroken) {
+                parent->runtime->pkgBrokenInstall.append(pkg->name());
+            }
+            if (pkg->state() & QApt::Package::State::InstallPolicyBroken) {
+                parent->runtime->pkgInstallPolicyBroken.append(pkg->name());
+            }
+            if (pkg->state() & QApt::Package::State::NowPolicyBroken) {
+                parent->runtime->pkgNowPolicyBroken.append(pkg->name());
+            }
+            if (pkg->state() & QApt::Package::State::NowBroken) {
+                parent->runtime->pkgNowBroken.append(pkg->name());
+            }
+            if (pkg->state() & QApt::Package::State::ResidualConfig) {
+                parent->runtime->pkgResidualConfig.append(pkg->name());
+            }
+
         i++;
+        }
     }
 
     QFuture<QStringList *> future = QtConcurrent::run(SpecialEdits::runtime()->sortPackages, listering);
     m_watcher.setFuture(future);
 
-    qDebug() << "1st step right.";
-
     listON = m_watcher.result();
-
-    i = 0;
-    while (i < listON->length()) {
-        ui->listWidget->addItem(listON->at(i));
-        i++;
-    }
+    ui->listWidget->addItems(*listON);
 
     CURRENT = new QString;
     qDebug() << "Total amount of available packages for the current architecture: " + QString::number(i) + ".";
@@ -52,10 +74,6 @@ SecondUI::SecondUI(MainView *parent) :
 
     connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=]() { Q_EMIT packageWasSelected(new QString(ui->listWidget->currentItem()->text())); });
     old_Filter = new QString("All");
-
-    i = 0;
-
-    qDebug() << "SecondUI component initialization finished, alias m_listing.";
 }
 
 SecondUI::~SecondUI()
@@ -91,6 +109,7 @@ void SecondUI::runFilter(QString *filter)
 
 void SecondUI::checkByChar(QString *value)
 {
+
     int i = 0;
 
     if (value == QString("")) {
@@ -107,8 +126,12 @@ void SecondUI::checkByChar(QString *value)
 
             if (QString(listON->at(i)).contains(value) == true) {
                 ui->listWidget->addItem(listON->at(i));
+                qDebug() << listON->at(i);
             }
             i++;
+        }
+        if (ui->listWidget->count() != -1) {
+            ui->listWidget->addItem("Looks like the package you've search isn't available or don't exists.");
         }
     }
 }

@@ -1,4 +1,4 @@
-#include "replyerfixer.h"
+#include "screenshotobject.h"
 
-ReplyerFixer::ReplyerFixer()
+ScreenShotObject::ScreenShotObject()
 {}

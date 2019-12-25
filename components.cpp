@@ -63,10 +63,8 @@ Components::~Components()
 
 void Components::init(QString * SECTION)
 {
-    QString path = "/tmp/nui/" + *SECTION + "/apps.ini";
-    qDebug() << path;
-
-    QFile file("/tmp/nui/" + *SECTION + "/apps.ini");
+    QString path = "/tmp/nui/NeoStore-WebContent-master/" + *SECTION + "/apps.ini";
+    QFile file(path);
 
     if (!file.open(QFile::ReadWrite | QFile::Text)) {
         qDebug() << "Warning! Apps of the category" + *SECTION + " cannot be loaded...";
@@ -77,8 +75,8 @@ void Components::init(QString * SECTION)
         app2->init(new QString(settings.value("1").toString()), new QString(settings.value("RN1").toString()));
         app3->init(new QString(settings.value("2").toString()), new QString(settings.value("RN2").toString()));
         app4->init(new QString(settings.value("3").toString()), new QString(settings.value("RN3").toString()));
-        app5->init(new QString(settings.value("4").toString()), new QString(settings.value("RN5").toString()));
-        app6->init(new QString(settings.value("5").toString()), new QString(settings.value("RN4").toString()));
+        app5->init(new QString(settings.value("4").toString()), new QString(settings.value("RN4").toString()));
+        app6->init(new QString(settings.value("5").toString()), new QString(settings.value("RN5").toString()));
         app7->init(new QString(settings.value("6").toString()), new QString(settings.value("RN6").toString()));
         app8->init(new QString(settings.value("7").toString()), new QString(settings.value("RN7").toString()));
         settings.setValue("0", "Deepin File Manager");

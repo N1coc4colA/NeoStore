@@ -22,12 +22,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    NextUIInterface.cpp \
+    about.cpp \
     appcomponent.cpp \
     bookpage.cpp \
     categories.cpp \
     components.cpp \
+    contentdownloader.cpp \
     downloadarea.cpp \
+    downloadhandler.cpp \
     downloadpage.cpp \
+    dtitlebar.cpp \
     flowlayout.cpp \
     installedpackagesview.cpp \
     localfilter.cpp \
@@ -36,18 +41,27 @@ SOURCES += \
     mainview.cpp \
     ndeclarative.cpp \
     packageview.cpp \
-    replyerfixer.cpp \
+    screenshotwidget.cpp \
     secondui.cpp \
     servicemanager.cpp \
-    start.cpp
+    start.cpp \
+    textprogressbar.cpp \
+    tools.cpp \
+    toolsview.cpp
 
 HEADERS += \
+    NextUIInterface.h \
+    about.h \
     appcomponent.h \
     bookpage.h \
     categories.h \
     components.h \
+    contentdownloader.h \
+    dapplication_p.h \
     downloadarea.h \
+    downloadhandler.h \
     downloadpage.h \
+    dtitlebar.h \
     flowlayout.h \
     installedpackagesview.h \
     localfilter.h \
@@ -55,12 +69,16 @@ HEADERS += \
     mainview.h \
     ndeclarative.h \
     packageview.h \
-    replyerfixer.h \
+    screenshotwidget.h \
     secondui.h \
     servicemanager.h \
-    start.h
+    start.h \
+    textprogressbar.h \
+    tools.h \
+    toolsview.h
 
 FORMS += \
+    about.ui \
     appcomponent.ui \
     bookpage.ui \
     categories.ui \
@@ -70,11 +88,14 @@ FORMS += \
     lookupobj.ui \
     mainview.ui \
     packageview.ui \
+    screenshotwidget.ui \
     secondui.ui \
     start.ui \
-    installedpackagesview.ui
+    installedpackagesview.ui \
+    tools.ui \
+    toolsview.ui
 
-unix:!macx: LIBS += -lKF5KIOCore -ldebconf-kde
+unix:!macx: LIBS += -ldebconf-kde -lKF5CoreAddons -lKF5KIOCore
 
 RESOURCES += \
     main.qrc

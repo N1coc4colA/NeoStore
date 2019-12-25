@@ -16,4 +16,5 @@ Start::~Start()
 
 void Start::setPercentage(int value)
 {
+    ui->progressBar->setValue(value);
 }

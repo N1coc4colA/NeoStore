@@ -50,6 +50,9 @@
        <pointsize>7</pointsize>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border-radius: 3px;</string>
+     </property>
      <property name="text">
       <string>This Application is the property of n1coc4cola and its content can be under copyright. 
 If something come from you and you want it removed from here:

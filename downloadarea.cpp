@@ -1,17 +1,20 @@
 #include "downloadarea.h"
 #include "ui_downloadarea.h"
 
+#include <DThemeManager>
 #include <QApt/Transaction>
+
+DWIDGET_USE_NAMESPACE
 
 DownloadArea::DownloadArea(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DownloadArea)
 {
-    this->setStyleSheet("background-color: #0000006b");
     ui->setupUi(this);
     divideby = 1;
     ui->widget->setVisible(false);
     ui->widget_2->setVisible(true);
+    DThemeManager::instance()->setTheme(ui->pushButton, "light");
 }
 
 DownloadArea::~DownloadArea()
