@@ -18,8 +18,6 @@ BookPage::BookPage(QWidget *parent) :
     m_component = new Components;
     ui->horizontalLayout->addWidget(m_component);
     connect(m_component, &Components::sendData, this, &BookPage::handleValue);
-
-    qDebug() << "BookPage component initialization finished, alias viewer.";
 }
 
 BookPage::~BookPage()
@@ -31,7 +29,7 @@ BookPage::~BookPage()
 void BookPage::init(QString *SECTION)
 {
     QString bckValue = nullptr;
-    QString path = "/tmp/nui/";
+    QString path = "/tmp/nui/NeoStore-WebContent-master/";
 
     if (QString("Games") == SECTION) {
         ui->widget_2->setStyleSheet("background-color: #1b1b1d;");
@@ -47,8 +45,6 @@ void BookPage::init(QString *SECTION)
 
     ui->Title->setStyleSheet("border-image: url(); background-image: url(); background-color: #00000000; color: white; font-size: 70px;");
     m_component->init(SECTION);
-
-    qDebug() << "BookPage component's UI initialization finished, alias viewer.";
 }
 
 void BookPage::handleValue(QString *value)

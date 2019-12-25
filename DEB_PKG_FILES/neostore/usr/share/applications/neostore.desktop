@@ -1,0 +1,18 @@
+[Desktop Entry]
+Categories=Settings;System;Utility;
+Comment=Simple and easy to use package manager
+Encoding=UTF-8
+Exec=/home/nicolas/RitualStore/NeoStore -f url:%f
+GenericName=NeoStore
+Icon=/usr/share/applications/neostore/neostore.svg
+MimeType=application/x-deb;
+Name=NeoStore
+Path=/usr/bin/
+StartupNotify=false
+StartupWMClass=NeoStore
+Terminal=false
+Type=Application
+Version=1.0
+X-Deepin-Vendor=user-custom
+X-Desktop-File-Install-Version=0.4
+X-MultipleArgs=false
